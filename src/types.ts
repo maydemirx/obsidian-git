@@ -37,6 +37,8 @@ export interface ObsidianGitSettings {
     refreshSourceControlTimer: number;
     showBranchStatusBar: boolean;
     setLastSaveToLastCommit: boolean;
+
+    createRemoteBranchAutomatically: boolean;
 }
 
 export type SyncMethod = 'rebase' | 'merge' | 'reset';

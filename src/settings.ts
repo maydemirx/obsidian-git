@@ -464,6 +464,17 @@ export class ObsidianGitSettingsTab extends PluginSettingTab {
                             plugin.saveSettings();
                         })
                 );
+        new Setting(containerEl)
+            .setName("Create remote branch automatically")
+            .setDesc("Creates remote branch by using local branch")
+            .addToggle((toggle) =>
+                toggle
+                    .setValue(plugin.settings.createRemoteBranchAutomatically)
+                    .onChange((value) => {
+                        plugin.settings.createRemoteBranchAutomatically = value;
+                        plugin.saveSettings();                        
+                    })
+            );
 
         if (plugin.gitManager instanceof SimpleGit)
             new Setting(containerEl)
