@@ -24319,7 +24319,15 @@ var SimpleGit = class extends GitManager {
     if (this.plugin.settings.updateSubmodules) {
       await this.git.env({ ...process.env, "OBSIDIAN_GIT": 1 }).subModule(["foreach", "--recursive", `tracking=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)"); echo $tracking; if [ ! -z "$(git diff --shortstat $tracking)" ]; then git push; fi`], (err) => this.onError(err));
     }
-    await this.git.env({ ...process.env, "OBSIDIAN_GIT": 1 }).push((err) => this.onError(err));
+    if (this.plugin.settings.createRemoteBranchAutomatically) {
+      if (currentBranch2) {
+        await this.git.env({ ...process.env, "OBSIDIAN_GIT": 1 }).push(["--set-upstream", "origin", currentBranch2], (err) => this.onError(err));
+      } else {
+        this.plugin.displayError("Could not push the current branch not set");
+      }
+    } else {
+      await this.git.env({ ...process.env, "OBSIDIAN_GIT": 1 }).push((err) => this.onError(err));
+    }
     return remoteChangedFiles;
   }
   async canPush() {
